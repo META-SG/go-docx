@@ -44,6 +44,9 @@ func unpack(zipReader *zip.Reader) (docx *Docx, err error) {
 	docx.tmplfs = zipReader
 	docx.tmpfslst = make([]string, 0, 64)
 	for _, f := range zipReader.File {
+		if f.FileInfo().IsDir() {
+			continue
+		}
 		if f.Name == "word/_rels/document.xml.rels" {
 			err = docx.parseDocRelation(f)
 			if err != nil {
